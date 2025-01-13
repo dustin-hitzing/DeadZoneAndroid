@@ -3,4 +3,8 @@
     <color name="primary_bg">#F1ECEC</color>
     <color name="primary_text">#000000</color>
     <color name="accent_color">#7EB2DD</color>
+    <color name="positive_bg">#e1ede5</color>
+    <color name="negative_bg">#F9E7E7</color>
+    <color name="positive">#5ECC67</color>
+    <color name="negative">#D66A6A</color>
 </resources>

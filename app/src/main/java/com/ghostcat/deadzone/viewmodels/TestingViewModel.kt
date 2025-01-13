@@ -1,11 +1,9 @@
 package com.ghostcat.deadzone.viewmodels
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ghostcat.deadzone.models.ConnectionInfo
+import com.ghostcat.deadzone.models.TestResult
 import com.ghostcat.deadzone.services.ConnectivityChecker
 import com.ghostcat.deadzone.services.GeoLocationService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +22,14 @@ class TestingViewModel @Inject constructor(
 ) : ViewModel() {
     private val _isConnected = MutableStateFlow(false)
     val isConnected: StateFlow<Boolean> = _isConnected
+
+    private val _successes = MutableStateFlow(0)
+    val successes: StateFlow<Int> = _successes
+
+    private  val _failures = MutableStateFlow(0)
+    val failures: StateFlow<Int> = _failures
+
+    private var testResults: MutableList<TestResult> = mutableListOf()
 
     private var monitoringJob: Job? = null
 
@@ -58,12 +64,27 @@ class TestingViewModel @Inject constructor(
         monitoringJob = null
     }
 
+    fun endTesting() {
+        stopMonitoring()
+    }
+
     private suspend fun handleSuccess(connectionInfo: ConnectionInfo) {
+        _successes.value += 1
         val geoLocation = geoLocationService.getCurrentLocation()
+        val testResult = TestResult(
+            connectionInfo = connectionInfo,
+            geoLocation = geoLocation
+        )
+        testResults.add(testResult)
     }
 
     private suspend fun handleFailure(connectionInfo: ConnectionInfo) {
-
+        _failures.value += 1
+        val testResult = TestResult(
+            connectionInfo = connectionInfo,
+            geoLocation = null,
+        )
+        testResults.add(testResult)
     }
 
 }

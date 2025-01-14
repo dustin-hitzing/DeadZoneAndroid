@@ -1,7 +1,9 @@
 package com.ghostcat.deadzone.models
 
 import android.location.Location
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class GeoLocation(
     val latitude: Double,
     val longitude: Double,

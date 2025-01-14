@@ -2,7 +2,9 @@ package com.ghostcat.deadzone.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ghostcat.deadzone.database.TestReportDAO
 import com.ghostcat.deadzone.models.ConnectionInfo
+import com.ghostcat.deadzone.models.TestReport
 import com.ghostcat.deadzone.models.TestResult
 import com.ghostcat.deadzone.services.ConnectivityChecker
 import com.ghostcat.deadzone.services.GeoLocationService
@@ -19,6 +21,7 @@ import javax.inject.Inject
 class TestingViewModel @Inject constructor(
     private val connectivityChecker: ConnectivityChecker,
     private val geoLocationService: GeoLocationService,
+    private val testReportDao: TestReportDAO,
 ) : ViewModel() {
     private val _isConnected = MutableStateFlow(false)
     val isConnected: StateFlow<Boolean> = _isConnected
@@ -66,6 +69,12 @@ class TestingViewModel @Inject constructor(
 
     fun endTesting() {
         stopMonitoring()
+        viewModelScope.launch {
+            var report = TestReport(
+                testResults = testResults
+            )
+            testReportDao.insertTestReport(report)
+        }
     }
 
     private suspend fun handleSuccess(connectionInfo: ConnectionInfo) {

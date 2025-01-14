@@ -1,5 +1,8 @@
 package com.ghostcat.deadzone.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ConnectionInfo(
     val isConnected: Boolean,
     val networkType: String,

@@ -1,6 +1,7 @@
 package com.ghostcat.deadzone.views
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ghostcat.deadzone.R
 import com.ghostcat.deadzone.Screen
@@ -47,10 +49,13 @@ fun HomePage(navController: NavController,
                     contentDescription = null,
                     modifier = Modifier.size(64.dp)
                 )
-                Icon(
+                Icon (
                     painter = painterResource(id = R.drawable.deadzone_icon),
                     contentDescription = null,
                     modifier = Modifier.size(64.dp)
+                        .clickable {
+                            navController.navigate(Screen.MapList.route)
+                        }
                 )
 
             }

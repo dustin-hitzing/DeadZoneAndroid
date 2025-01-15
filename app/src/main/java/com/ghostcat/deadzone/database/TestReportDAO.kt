@@ -8,8 +8,7 @@ import com.ghostcat.deadzone.models.TestReport
 @Dao
 interface TestReportDAO {
     @Insert
-    suspend fun insertTestReport(testResult: TestReport)
-
+    suspend fun insertTestReport(testReport: TestReport)
 
     @Query("SELECT * FROM test_reports")
     suspend fun getAllTestReports(): List<TestReport>

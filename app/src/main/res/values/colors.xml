@@ -7,4 +7,5 @@
     <color name="negative_bg">#F9E7E7</color>
     <color name="positive">#5ECC67</color>
     <color name="negative">#D66A6A</color>
+    <color name="brand_gray">#D9D9D9</color>
 </resources>

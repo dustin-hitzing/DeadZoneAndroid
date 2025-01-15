@@ -28,6 +28,6 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun provideTestResultsDao(database: AppDatabase): TestReportDAO {
-        return database.testReporttDao()
+        return database.testReportDao()
     }
 }

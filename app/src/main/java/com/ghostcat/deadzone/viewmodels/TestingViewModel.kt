@@ -35,7 +35,7 @@ class TestingViewModel @Inject constructor(
     private var testResults: MutableList<TestResult> = mutableListOf()
 
     private var monitoringJob: Job? = null
-
+    private var systemStartTime: Long = System.currentTimeMillis()
     init {
         monitorConnectivity()
     }
@@ -43,6 +43,7 @@ class TestingViewModel @Inject constructor(
     private fun monitorConnectivity() {
         monitoringJob = viewModelScope.launch {
             val startTime = System.currentTimeMillis()
+            systemStartTime = startTime
             while (isActive) {
                 val elapsedTime = System.currentTimeMillis() - startTime
                 if (elapsedTime >= (60 * 60 * 1000)) {
@@ -71,7 +72,8 @@ class TestingViewModel @Inject constructor(
         stopMonitoring()
         viewModelScope.launch {
             var report = TestReport(
-                testResults = testResults
+                testResults = testResults,
+                duration = System.currentTimeMillis() - systemStartTime
             )
             testReportDao.insertTestReport(report)
         }

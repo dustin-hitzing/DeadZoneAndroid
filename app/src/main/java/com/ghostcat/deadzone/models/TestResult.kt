@@ -1,17 +1,26 @@
 package com.ghostcat.deadzone.models
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
+import androidx.room.TypeConverter
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
-@Entity(tableName = "test_results")
 data class TestResult(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    @Embedded val connectionInfo: ConnectionInfo,
-    @Embedded val geoLocation: GeoLocation?,
+    val connectionInfo: ConnectionInfo,
+    val geoLocation: GeoLocation?,
 )
 
+class TestResultConverter {
+    private val json = Json {ignoreUnknownKeys = true}
+
+    @TypeConverter
+    fun fromTestResultList(testReports: List<TestResult>): String {
+        return json.encodeToString(testReports)
+    }
+
+    @TypeConverter
+    fun toTestResultList(testResults: String): List<TestResult> {
+        return json.decodeFromString(testResults)
+    }
+}

@@ -66,7 +66,6 @@ fun TestingPage(navController: NavController, modifier: Modifier) {
                     contentDescription = null,
                     modifier = Modifier.size(64.dp)
                 )
-
             }
             Spacer(modifier = Modifier.height(20.dp))
             Row() {
@@ -98,7 +97,7 @@ fun TestingPage(navController: NavController, modifier: Modifier) {
 
         Button(onClick = {
             viewModel.endTesting()
-            if (failures > 5) {
+            if (failures >= 5) {
                 isFailurePopupVisible = true
             } else {
                 isSuccessPopupVisible = true

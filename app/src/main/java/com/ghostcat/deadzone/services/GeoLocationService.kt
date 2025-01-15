@@ -4,12 +4,18 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.os.Build
 import androidx.core.app.ActivityCompat
+import com.ghostcat.deadzone.models.AddressInfo
 import com.ghostcat.deadzone.models.GeoLocation
 import com.ghostcat.deadzone.models.toGeoLocation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class GeoLocationService(private val context: Context) {
 
@@ -25,7 +31,9 @@ class GeoLocationService(private val context: Context) {
             }
 
             val location = fusedLocationProviderClient.lastLocation.await()
-            location?.toGeoLocation()
+            val geolocation = location?.toGeoLocation()
+            geolocation?.addressInfo = getAddressFromCoordinates(location.latitude, location.longitude)
+            geolocation
         } catch (e: Exception) {
             null // Handle errors (e.g., log them)
         }
@@ -43,6 +51,40 @@ class GeoLocationService(private val context: Context) {
         ) == PackageManager.PERMISSION_GRANTED
 
         return fineLocationGranted || coarseLocationGranted
+    }
+
+    private suspend fun getAddressFromCoordinates(latitude: Double, longitude: Double): AddressInfo {
+        val geocoder = Geocoder(context)
+        return suspendCancellableCoroutine { continuation ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                geocoder.getFromLocation(latitude, longitude, 1) { addresses ->
+                    val address = addresses.firstOrNull()
+                    val addressInfo = AddressInfo(
+                        countryCode = address?.countryCode,
+                        countryName = address?.countryName,
+                        phone = address?.phone,
+                        postalCode = address?.postalCode,
+                        locality = address?.locality,
+                        premises = address?.premises,
+                        subLocality = address?.subLocality
+                    )
+                    continuation.resumeWith(Result.success(addressInfo))
+                }
+            } else {
+                val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+                val address = addresses?.firstOrNull()
+                val addressInfo = AddressInfo(
+                    countryCode = address?.countryCode,
+                    countryName = address?.countryName,
+                    phone = address?.phone,
+                    postalCode = address?.postalCode,
+                    locality = address?.locality,
+                    premises = address?.premises,
+                    subLocality = address?.subLocality
+                )
+                continuation.resumeWith(Result.success(addressInfo))
+            }
+        }
     }
 
 //    suspend fun getUpdatedLocation(): GeoLocation? {

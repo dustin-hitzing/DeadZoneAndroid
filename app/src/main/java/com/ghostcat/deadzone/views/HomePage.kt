@@ -31,8 +31,10 @@ import com.ghostcat.deadzone.R
 import com.ghostcat.deadzone.Screen
 
 @Composable
-fun HomePage(navController: NavController,
-             modifier: Modifier) {
+fun HomePage(
+    navController: NavController,
+    modifier: Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -42,17 +44,20 @@ fun HomePage(navController: NavController,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column {
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.deadzone_icon),
                     contentDescription = null,
                     modifier = Modifier.size(64.dp)
                 )
-                Icon (
+                Icon(
                     painter = painterResource(id = R.drawable.deadzone_icon),
                     contentDescription = null,
-                    modifier = Modifier.size(64.dp)
+                    modifier = Modifier
+                        .size(64.dp)
                         .clickable {
                             navController.navigate(Screen.MapList.route)
                         }
@@ -60,8 +65,11 @@ fun HomePage(navController: NavController,
 
             }
             Spacer(modifier = Modifier.height(100.dp))
-            Column(modifier = Modifier.fillMaxWidth()
-                .padding(10.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+            ) {
                 Text(
                     text = "Connected\nor not connected?",
                     style = MaterialTheme.typography.headlineLarge,
@@ -82,15 +90,18 @@ fun HomePage(navController: NavController,
             }
         }
 
-        Button(onClick = {
-            navController.navigate(Screen.Testing.route)
-        },
-            modifier = Modifier.fillMaxWidth()
+        Button(
+            onClick = {
+                navController.navigate(Screen.Testing.route)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 26.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.accent_color),
                 contentColor = Color.White
-            )) {
+            )
+        ) {
             Text("Start Test")
         }
     }

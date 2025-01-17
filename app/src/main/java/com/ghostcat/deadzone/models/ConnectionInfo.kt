@@ -8,5 +8,6 @@ data class ConnectionInfo(
     val networkType: String,
     val ipAddress: String,
     val providerName: String,
-    val wifiInfo: String
+    val wifiInfo: String,
+    val hasService: Boolean = false
 )

@@ -17,12 +17,18 @@ class MapViewModel @Inject constructor(
     private val _testReports = MutableStateFlow<List<TestReport>>(emptyList())
     val testReports: StateFlow<List<TestReport>> = _testReports
 
-    init {
+    private val _selectedTestReport = MutableStateFlow<TestReport?>(null)
+    val selectedTestReport: StateFlow<TestReport?> = _selectedTestReport
+
+    fun getReports() {
         viewModelScope.launch {
             _testReports.value = testReportDao.getAllTestReports()
                 .sortedByDescending { it.testResults[0].geoLocation?.timestamp }
         }
     }
 
+    fun selectTestReport(testReport: TestReport) {
+        _selectedTestReport.value = testReport
+    }
 
 }

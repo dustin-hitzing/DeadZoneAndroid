@@ -87,7 +87,4 @@ class GeoLocationService(private val context: Context) {
         }
     }
 
-//    suspend fun getUpdatedLocation(): GeoLocation? {
-//
-//    }
 }

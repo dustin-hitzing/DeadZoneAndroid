@@ -29,13 +29,14 @@ class TestingViewModel @Inject constructor(
     private val _successes = MutableStateFlow(0)
     val successes: StateFlow<Int> = _successes
 
-    private  val _failures = MutableStateFlow(0)
+    private val _failures = MutableStateFlow(0)
     val failures: StateFlow<Int> = _failures
 
     private var testResults: MutableList<TestResult> = mutableListOf()
 
     private var monitoringJob: Job? = null
     private var systemStartTime: Long = System.currentTimeMillis()
+
     init {
         monitorConnectivity()
     }
@@ -51,7 +52,7 @@ class TestingViewModel @Inject constructor(
                     break
                 }
                 val connectionInfo = connectivityChecker.getConnectionInfo()
-                _isConnected.value = connectionInfo.isConnected
+                _isConnected.value = connectionInfo.isConnected && connectionInfo.hasService
                 if (_isConnected.value) {
                     handleSuccess(connectionInfo)
                 } else {
@@ -71,7 +72,7 @@ class TestingViewModel @Inject constructor(
     fun endTesting() {
         stopMonitoring()
         viewModelScope.launch {
-            var report = TestReport(
+            val report = TestReport(
                 testResults = testResults,
                 duration = System.currentTimeMillis() - systemStartTime
             )

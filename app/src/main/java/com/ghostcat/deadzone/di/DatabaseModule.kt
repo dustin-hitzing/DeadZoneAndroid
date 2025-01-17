@@ -22,7 +22,10 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "test_results"
-        ).build()
+        )
+            //Remove this line in production
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Singleton

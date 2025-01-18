@@ -76,6 +76,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     implementation("com.google.maps.android:maps-compose:2.12.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("androidx.compose.material:material-icons-extended:1.7.6")
+    //implementation("com.google.accompanist:accompanist-navigation-animation:0.33.0")
 }
 
 kapt {

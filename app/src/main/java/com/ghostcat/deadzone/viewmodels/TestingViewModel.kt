@@ -92,9 +92,10 @@ class TestingViewModel @Inject constructor(
 
     private suspend fun handleFailure(connectionInfo: ConnectionInfo) {
         _failures.value += 1
+        val geoLocation = geoLocationService.getRobustDeadReckonedPositionFullKalman()
         val testResult = TestResult(
             connectionInfo = connectionInfo,
-            geoLocation = null,
+            geoLocation = geoLocation,
         )
         testResults.add(testResult)
     }

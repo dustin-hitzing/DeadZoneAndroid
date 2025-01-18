@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +40,7 @@ import com.ghostcat.deadzone.viewmodels.TestingViewModel
 
 @Composable
 fun TestingPage(navController: NavController, modifier: Modifier) {
+    val view = LocalView.current
     val viewModel: TestingViewModel = hiltViewModel()
     val isConnected by viewModel.isConnected.collectAsStateWithLifecycle()
     val successes by viewModel.successes.collectAsStateWithLifecycle()
@@ -49,6 +52,11 @@ fun TestingPage(navController: NavController, modifier: Modifier) {
     val negativeBGColor = colorResource(id = R.color.negative_bg)
     val negativeColor = colorResource(id = R.color.negative)
 
+
+    SideEffect {
+        view.keepScreenOn = true
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -59,8 +67,10 @@ fun TestingPage(navController: NavController, modifier: Modifier) {
     ) {
 
         Column {
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.deadzone_icon),
                     contentDescription = null,
@@ -74,8 +84,11 @@ fun TestingPage(navController: NavController, modifier: Modifier) {
                 Text(text = "Failures: $failures")
             }
             Spacer(modifier = Modifier.height(100.dp))
-            Column(modifier = Modifier.fillMaxWidth()
-                .padding(10.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+            ) {
                 Text(
                     text = "Test in Progress",
                     style = MaterialTheme.typography.headlineLarge,
@@ -95,20 +108,23 @@ fun TestingPage(navController: NavController, modifier: Modifier) {
             Text(text = "Not Connected")
         }
 
-        Button(onClick = {
-            viewModel.endTesting()
-            if (failures >= 5) {
-                isFailurePopupVisible = true
-            } else {
-                isSuccessPopupVisible = true
-            }
-        },
-            modifier = Modifier.fillMaxWidth()
+        Button(
+            onClick = {
+                viewModel.endTesting()
+                if (failures >= 5) {
+                    isFailurePopupVisible = true
+                } else {
+                    isSuccessPopupVisible = true
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 26.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.accent_color),
                 contentColor = Color.White
-            )) {
+            )
+        ) {
             Text("End Test")
         }
     }

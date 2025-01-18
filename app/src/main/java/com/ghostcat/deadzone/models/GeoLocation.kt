@@ -2,7 +2,6 @@ package com.ghostcat.deadzone.models
 
 import android.location.Location
 import androidx.room.TypeConverter
-import androidx.room.TypeConverters
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

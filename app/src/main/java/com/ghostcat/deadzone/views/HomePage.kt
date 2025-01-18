@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -46,22 +49,28 @@ fun HomePage(
         Column {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.deadzone_icon),
                     contentDescription = null,
                     modifier = Modifier.size(64.dp)
                 )
-                Icon(
-                    painter = painterResource(id = R.drawable.deadzone_icon),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clickable {
-                            navController.navigate(Screen.MapList.route)
-                        }
-                )
+                Row {
+                    Icon(
+                        imageVector = Icons.Default.Map,
+                        contentDescription = null,
+                        tint = colorResource(R.color.accent_color),
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable {
+                                navController.navigate(Screen.MapList.route)
+                            }
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
+
 
             }
             Spacer(modifier = Modifier.height(100.dp))
